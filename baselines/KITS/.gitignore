@@ -1,0 +1,8 @@
+datasets/
+final_model/
+logs/
+results/
+.idea/
+__pycache__/
+*.pyc
+*.zip

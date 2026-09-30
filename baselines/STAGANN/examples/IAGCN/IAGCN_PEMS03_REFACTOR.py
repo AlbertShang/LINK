@@ -1,0 +1,22 @@
+"""IAGCN configuration for the converted pure PEMS03 dataset."""
+
+import sys
+from pathlib import Path
+
+STAGANN_DIR = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(STAGANN_DIR))
+
+from examples.pems03_refactor_common import build_config
+from stkriging.archs import IAGCN
+
+CFG = build_config(
+    model_name="IAGCN",
+    architecture=IAGCN,
+    model_parameters={"dropout": 0.1, "T": 24, "gcn_layer": 1},
+    learning_rate=0.0001,
+    weight_decay=1.0e-6,
+    epochs=15,
+    batch_size=16,
+    workers=1,
+    min_delta=0.5,
+)
