@@ -114,6 +114,47 @@ Metrics:
 -   RMSE
 -   MAPE
 
+## Cross-dataset Transfer Ablation
+
+Freeze a PEMS03 checkpoint and evaluate it directly on PEMS04/07/08 without
+training or fine-tuning on the target districts:
+
+``` bash
+python experiments/main.py --districts 3
+python experiments/cross_dataset_transfer.py --include-source
+```
+
+To reuse an existing PEMS03 checkpoint, including an ablation variant:
+
+``` bash
+python experiments/cross_dataset_transfer.py --checkpoint outputs/pems03/best_model.pt --target-districts 4 7 8 --include-source
+```
+
+The experiment retains the source model configuration, weights, flow scale,
+and Top-K. Each target uses its own preprocessed road network, metadata, and
+saved node splits. Target `train` nodes provide observed traffic for kriging;
+they do not update model parameters. Validation/test nodes remain held out
+under the existing evaluation protocol. No target labels select checkpoints
+or tune hyperparameters. All current datasets start on 2023-01-01; datasets
+with another calendar origin must have calendar features aligned first.
+
+Results are isolated under `outputs/ablation_cross_dataset/pems03/`: each
+district gets `metrics.json`, and `summary.csv` / `summary.json` collect the
+configured metrics (MAE, RMSE, MAPE by default) and valid counts.
+`--include-source` adds a PEMS03 in-domain reference. `--save-completion`
+also exports completed flows and validity masks. `--evaluation-chunk` controls
+inference chunk size; `--max-time-steps` is for debugging only.
+
+For the local-training comparison, evaluate independently trained target models:
+
+``` bash
+python experiments/main.py --mode evaluate --districts 4 7 8
+```
+
+Use the same model settings, Top-K, splits, metrics, and full time range.
+Compare each target's local and transferred test errors to measure its transfer
+penalty. The PEMS03 reference alone does not measure that penalty.
+
 ## Main Components
 
 -   **Adaptive Subgraph Extraction**\
