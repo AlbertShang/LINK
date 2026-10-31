@@ -13,8 +13,8 @@ LINK instantiates this framework with a Spectral Propagation Network
 (SPN), which captures dominant temporal patterns through spectral
 propagation and recovers short-term variations with residual refinement.
 
-Experiments are conducted on the TraffiKrig benchmark, including PEMS03,
-PEMS04, PEMS07, and PEMS08.
+Experiments are conducted on the TraffiKrig benchmark, including TraffiKrig-03,
+TraffiKrig-04, TraffiKrig-07, and TraffiKrig-08.
 
 ## Repository Structure
 
